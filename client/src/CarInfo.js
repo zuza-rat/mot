@@ -1,6 +1,12 @@
 import car from "./car.jpg";
 
-function CarInfo({ carDetails, showMotError, isLoading }) {
+function CarInfo({
+  carDetails,
+  showMotError,
+  showMotNetworkError,
+  showMotRegError,
+  isLoading,
+}) {
   const usToUkDate = (date) => {
     const dateArray = date.split(".");
     const ukDateArray = dateArray.reverse();
@@ -18,7 +24,23 @@ function CarInfo({ carDetails, showMotError, isLoading }) {
     template = (
       <div>
         <p className="car-info">
-          Something went wrong. Check entered number and try again.
+          Something went wrong. Check the entered number and try again.
+        </p>
+      </div>
+    );
+  } else if (showMotNetworkError) {
+    template = (
+      <div>
+        <p className="car-info">
+          Something went wrong. Try again in five minutes.
+        </p>
+      </div>
+    );
+  } else if (showMotRegError) {
+    template = (
+      <div>
+        <p className="car-info">
+          Something went wrong. Check the number entered and try again.
         </p>
       </div>
     );
