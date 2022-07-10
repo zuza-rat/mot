@@ -1,11 +1,17 @@
 import axios from "axios";
 import { useState } from "react";
 
-function RegInput({ setCarDetails, setShowMotError, setIsLoading }) {
+function RegInput({
+  setCarDetails,
+  setShowMotError,
+  setShowMotNetworkError,
+  setShowMotRegError,
+  setIsLoading,
+}) {
   const [regNo, setRegNo] = useState("");
 
   const handleChangeReg = (event) => {
-    setRegNo(event.target.value);
+    setRegNo(event.target.value.replace(/ /g, ""));
   };
 
   const handleSearchRegNo = async (event) => {
@@ -14,19 +20,29 @@ function RegInput({ setCarDetails, setShowMotError, setIsLoading }) {
     try {
       setIsLoading(true);
       const carInfo = await axios.get(
-        `${process.env.REACT_APP_API_URL}/checkmot/${regNo}`,
-        {
-          headers: {
-            "x-api-key": "fZi8YcjrZN1cGkQeZP7Uaa4rTxua8HovaswPuIno",
-          },
-        }
+        `${process.env.REACT_APP_API_URL}/checkmot/${regNo}`
       );
       setIsLoading(false);
       setShowMotError(false);
+      setShowMotNetworkError(false);
+      setShowMotRegError(false);
       return setCarDetails(carInfo.data[0]);
     } catch (e) {
+      console.log(e);
       setIsLoading(false);
-      setShowMotError(true);
+      if (e.code === "ERR_NETWORK") {
+        setShowMotNetworkError(true);
+        setShowMotRegError(false);
+        setShowMotError(false);
+      } else if (e.code === "ERR_BAD_RESPONSE") {
+        setShowMotRegError(true);
+        setShowMotNetworkError(false);
+        setShowMotError(false);
+      } else {
+        setShowMotError(true);
+        setShowMotNetworkError(false);
+        setShowMotRegError(false);
+      }
     }
   };
 
@@ -34,6 +50,8 @@ function RegInput({ setCarDetails, setShowMotError, setIsLoading }) {
     setCarDetails("");
     setRegNo("");
     setShowMotError(false);
+    setShowMotNetworkError(false);
+    setShowMotRegError(false);
   };
 
   return (

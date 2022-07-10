@@ -5,6 +5,8 @@ import { useState } from "react";
 function MotChecker() {
   const [carDetails, setCarDetails] = useState("");
   const [showMotError, setShowMotError] = useState(false);
+  const [showMotNetworkError, setShowMotNetworkError] = useState(false);
+  const [showMotRegError, setShowMotRegError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -15,6 +17,8 @@ function MotChecker() {
             <RegInput
               setCarDetails={setCarDetails}
               setShowMotError={setShowMotError}
+              setShowMotNetworkError={setShowMotNetworkError}
+              setShowMotRegError={setShowMotRegError}
               setIsLoading={setIsLoading}
             />
           </div>
@@ -23,6 +27,8 @@ function MotChecker() {
           <CarInfo
             carDetails={carDetails}
             showMotError={showMotError}
+            showMotNetworkError={showMotNetworkError}
+            showMotRegError={showMotRegError}
             isLoading={isLoading}
           />
         </div>
